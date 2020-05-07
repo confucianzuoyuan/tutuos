@@ -13,3 +13,7 @@ mem:
 stack:
 	nasm -f bin boot_sect_stack.asm -o boot_sect_stack.bin
 	qemu-system-x86_64 boot_sect_stack.bin
+
+print:
+	nasm -f bin boot_sect_main.asm -o boot_sect_main.bin
+	qemu-system-x86_64 boot_sect_main.bin
