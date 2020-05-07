@@ -4,7 +4,7 @@
 mov bx, HELLO
 call print
 
-call print_nl ; 换行，汇编内置函数
+call print_nl
 
 mov bx, GOODBYE
 call print
