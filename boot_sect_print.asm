@@ -1,3 +1,7 @@
+; To save the register data, there is also a special command which uses the stack: `pusha`
+; and its brother `popa`, which pushes all registers to the stack automatically and
+; recovers them afterwards.
+
 print:
     pusha
 
