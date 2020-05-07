@@ -9,3 +9,7 @@ org:
 mem:
 	nasm -f bin boot_sect_memory.asm -o boot_sect_memory.bin
 	qemu-system-x86_64 boot_sect_memory.bin
+
+stack:
+	nasm -f bin boot_sect_stack.asm -o boot_sect_stack.bin
+	qemu-system-x86_64 boot_sect_stack.bin
