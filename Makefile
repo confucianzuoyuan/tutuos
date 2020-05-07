@@ -25,3 +25,7 @@ seg:
 disk:
 	nasm -f bin boot_sect_main.asm -o boot_sect_main.bin
 	qemu-system-x86_64 boot_sect_main.bin
+
+thirtytwobitprint:
+	nasm -f bin 32bit-print.asm -o 32bit-print.bin
+	qemu-system-x86_64 32bit-print.bin
