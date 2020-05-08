@@ -1,31 +1,33 @@
-run:
-	nasm -f bin boot_sect_hello.asm -o boot_sect_hello.bin
-	qemu-system-x86_64 boot_sect_hello.bin
+# $@ = target file
+# $< = first dependency
+# $^ = all dependencies
 
-org:
-	nasm -f bin boot_sect_memory_org.asm -o boot_sect_memory_org.bin
-	qemu-system-x86_64 boot_sect_memory_org.bin
+# First rule is the one executed when no parameters are fed to the Makefile
+all: run
 
-mem:
-	nasm -f bin boot_sect_memory.asm -o boot_sect_memory.bin
-	qemu-system-x86_64 boot_sect_memory.bin
+# Notice how dependencies are built as needed
+kernel.bin: kernel_entry.o kernel.o
+	i386-elf-ld -o $@ -Ttext 0x1000 $^ --oformat binary
 
-stack:
-	nasm -f bin boot_sect_stack.asm -o boot_sect_stack.bin
-	qemu-system-x86_64 boot_sect_stack.bin
+kernel_entry.o: kernel_entry.asm
+	nasm $< -f elf -o $@
 
-print:
-	nasm -f bin boot_sect_main.asm -o boot_sect_main.bin
-	qemu-system-x86_64 boot_sect_main.bin
+kernel.o: kernel.c
+	i386-elf-gcc -ffreestanding -S -c $< -o kernel.s
+	i386-elf-as -o $@ kernel.s
 
-seg:
-	nasm -f bin boot_sect_segmentation.asm -o boot_sect_segmentation.bin
-	qemu-system-x86_64 boot_sect_segmentation.bin
+# Rule to disassemble the kernel - may be useful to debug
+kernel.dis: kernel.bin
+	ndisasm -b 32 $< > $@
 
-disk:
-	nasm -f bin boot_sect_main.asm -o boot_sect_main.bin
-	qemu-system-x86_64 boot_sect_main.bin
+bootsect.bin: bootsect.asm
+	nasm $< -f bin -o $@
 
-switch:
-	nasm -f bin boot_sect_main.asm -o boot_sect_main.bin
-	qemu-system-x86_64 boot_sect_main.bin
+os-image.bin: bootsect.bin kernel.bin
+	cat $^ > $@
+
+run: os-image.bin
+	qemu-system-i386 -fda $<
+
+clean:
+	rm *.bin *.o *.dis
