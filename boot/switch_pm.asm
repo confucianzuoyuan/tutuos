@@ -20,4 +20,3 @@ init_pm: ; we are now using 32-bit instructions
     mov esp, ebp
 
     call BEGIN_PM ; 7. Call a well-known label with useful code
-

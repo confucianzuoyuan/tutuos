@@ -17,7 +17,7 @@ disk_load:
 
     ; [es:bx] <- pointer to buffer where the data will be stored
     ; caller sets it up for us, and it is actually the standard location for int 13h
-    int 0x13      ; BIOS interrupt, 将指定扇区的代码加载到内存的指定位置
+    int 0x13      ; BIOS interrupt
     jc disk_error ; if error (stored in the carry bit)
 
     pop dx
@@ -44,4 +44,3 @@ disk_loop:
 
 DISK_ERROR: db "Disk read error", 0
 SECTORS_ERROR: db "Incorrect number of sectors read", 0
-
