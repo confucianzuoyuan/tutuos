@@ -1,12 +1,13 @@
-C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c)
-HEADERS = $(wildcard kernel/*.h drivers/*.h cpu/*.h)
+C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c libc/*.c)
+HEADERS = $(wildcard kernel/*.h drivers/*.h cpu/*.h libc/*.h)
 # Nice syntax for file extension replacement
 OBJ = ${C_SOURCES:.c=.o cpu/interrupt.o}
 
 # Change this if your cross-compiler is somewhere else
 CC = /home/parallels/Desktop/i386-elf-gcc/bin/i386-elf-gcc
 # -g: Use debugging symbols in gcc
-CFLAGS = -g
+CFLAGS = -g -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs \
+		 -Wall -Wextra -Werror
 
 # First rule is run by default
 os-image.bin: boot/bootsect.bin kernel.bin
